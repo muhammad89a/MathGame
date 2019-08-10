@@ -7,6 +7,7 @@ const PlayNumber = (props) => {
 
     const BtnNumberEvent = () =>{
         console.log(`num ${props.number} ${props.status} `);
+        props.onClickEvent(props.number,props.status);
     };
 
     return (

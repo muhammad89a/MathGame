@@ -6,8 +6,8 @@ import StarsDisplay from '../StarsDisplay/StarsDisplay';
 
 const StarMatch = () => {
     const [starsNumber,setStarNumber] = React.useState(utils.random(1,9));
-    const [availableNums,setAvailableNums] = React.useState([1,2,3,4,5]);
-    const [candidateNums,setCandidateNums] = React.useState([2,3]);
+    const [availableNums,setAvailableNums] = React.useState(utils.range(1,9));
+    const [candidateNums,setCandidateNums] = React.useState([]);
 
     const candidateAreWronge = utils.sum(candidateNums) > starsNumber;
     const numberStatus = (number) => {
@@ -19,6 +19,31 @@ const StarMatch = () => {
         }
         return 'available';
     };
+
+    const onNumberClick = (number, currentStatus) => {
+        if (currentStatus === 'used') {
+          return;
+        }
+    
+        const newCandidateNums =
+          currentStatus === 'available'
+            ? candidateNums.concat(number)
+            : candidateNums.filter(cn => cn !== number);
+    
+        if (utils.sum(newCandidateNums) !== starsNumber) {
+          setCandidateNums(newCandidateNums);
+        } else {
+          const newAvailableNums = availableNums.filter(
+            n => !newCandidateNums.includes(n)
+          );
+          console.log(` candidateNums = ${candidateNums}`);
+          setStarNumber(utils.randomSumIn(newAvailableNums, 9));
+          setAvailableNums(newAvailableNums);
+        //   setCandidateNums([]);
+        }
+    };
+    
+
 
 
     return (
@@ -36,6 +61,7 @@ const StarMatch = () => {
                 key={number}
                 status={numberStatus(number)}
                 number={number}
+                onClickEvent={onNumberClick}
             />            
           )}
           </div>
